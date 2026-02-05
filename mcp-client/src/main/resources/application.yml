@@ -1,0 +1,71 @@
+server:
+  port: 8888
+spring:
+  ai:
+    deepseek:
+      api-key: ${API_KEY}
+      base-url: ${BASE_URL}
+      chat:
+        options:
+          model: ${CHAT_MODEL}
+      # 禁用 DeepSeek Embedding
+      embedding:
+        enabled: false
+    embedding:
+      onnx:
+        enabled: true
+        options:
+          model: all-MiniLM-L6-v2
+        transformer:
+          tokenizer:
+            uri: classpath:onnx/all-MiniLM-L6-v2/tokenizer.json
+          onnx:
+            model-uri: classpath:onnx/all-MiniLM-L6-v2/model.onnx
+    vectorstore:
+      redis:
+        initialize-schema: true # 自动创建 Redis 向量索引
+        index-name: lee-vectorstore # Redis 中的向量索引名称
+        prefix: 'embedding:' # Redis键的前缀
+    mcp:
+      client:
+        enabled: true
+        version: 1.0.0
+        request-timeout: 30s
+        name: spring-ai-mcp-client
+        type: async
+        http-client:
+          version: HTTP_1_1
+        sse:
+          connections:
+            server1:
+              url: https://mcp.amap.com
+              sse-endpoint: /sse?key=${AMAP_KEY}
+            # 自己第一个mcp服务
+            server2:
+              url: ${MCP_SERVER_URL}
+              sse-endpoint: /sse
+        stdio:
+           servers-configuration: classpath:mcp-server.json
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
+website:
+  domain: ${SERVER_URL}:8888/
+
+# searXNG的url配置
+internet:
+  websearch:
+    searxng:
+      url: ${SERVER_URL}:6688/search
+      counts: 25
+
+
+logging:
+  level:
+#    root: info
+    org.springframework.ai.mcp: DEBUG
+    io.modelcontextprotocol: DEBUG

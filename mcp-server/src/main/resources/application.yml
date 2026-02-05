@@ -1,0 +1,50 @@
+server:
+  port: 9060
+
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    passoword: ${MYSQL_PASSWORD}
+  ai:
+    mcp:
+      server:
+        name: spring-ai-mcp-server-sse
+        type: sync
+        sse-endpoint: /sse
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+        mail:
+          stmp:
+            socketFactory:
+              port: 465
+              class: javax.net.ssl.SSLSocketFactory
+            ssl:
+              enabled: true
+
+
+website:
+  domain: http://127.0.0.1:8081/
+
+# MyBatisPlus 的配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: assign_id
+      update-strategy: not_empty
+  mapper-locations: classpath*:/mappers/*.xml
+
+logging:
+  level:
+    root: info
+    com.baomidou.mybatisplus.samples.quickstart: debug
+    io.modelcontextprotocol: DEBUG
+    org.springframework.ai.mcp: DEBUG

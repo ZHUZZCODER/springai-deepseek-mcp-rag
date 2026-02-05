@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  mcp-server:
+    image: mcp-server-image
+    container_name: mcp-server
+    network_mode: host # 如果你应用支持通过环境变量配置端口
+
+  mcp-client:
+    image: mcp-client-image
+    container_name: mcp-client
+    network_mode: host
+    environment:
+      - MCP_SERVER_URL=http://127.0.0.1:9060
+    depends_on:
+      - mcp-server

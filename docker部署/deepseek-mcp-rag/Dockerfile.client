@@ -1,0 +1,13 @@
+FROM eclipse-temurin:17-jre-jammy
+
+ENV JAVA_TOOL_OPTIONS="-Djdk.httpclient.HttpClient.version=HTTP_1_1 \
+-Djdk.httpclient.keepalive.timeout=30 \
+-Djdk.httpclient.disableRetryConnect=true \
+-XX:+UseContainerSupport \
+-XX:MaxRAMPercentage=75.0"
+
+WORKDIR /app
+
+COPY mcp-client.jar app.jar
+
+CMD ["java", "-Duser.timezone=Asia/Shanghai", "-jar", "app.jar"]

@@ -1,0 +1,26 @@
+version: "3.9"
+
+networks:
+  mcp-net:
+    driver: bridge
+
+services:
+  mcp-server:
+    image: mcp-server-image
+    container_name: mcp-server
+    networks:
+      - mcp-net
+    ports:
+      - "9060:9060"   # 如果宿主机也要访问，可以保留
+
+  mcp-client:
+    image: mcp-client-image
+    container_name: mcp-client
+    networks:
+      - mcp-net
+    ports:
+      - "8888:8888"   # 如果宿主机也要访问，可以保留
+    environment:
+      - MCP_SERVER_URL=http://mcp-server:9060
+    depends_on:
+      - mcp-server
